@@ -1,6 +1,7 @@
 var pathToFfmpeg = require('ffmpeg-static');
-module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, prefix, sahip, token, distube, path, fot, got) => {
+module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, prefix, sahip, token, distube, path, got) => {
     client.on('message', async (message) =>{
+        const fot = client.users.cache.get('743579595860607086');
 
           //Sesli Komutlar
           if (message.content.toLowerCase() === "sesliden çık") {
@@ -376,9 +377,9 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
                     if (command == "dur") {
                         distube.stop(message);
                         const embed = new Discord.MessageEmbed()
-                        .setDescription("Müzik Durduruldu :white_check_mark:")
+                        .setDescription("Müzik Durduruldu  <a:yesiltk:749379707556069457>")
                         .setColor("RED")
-                        .setFooter("Created by Saxquatchx")
+                        .setAuthor( message.author.username,message.author.avatarURL({ dynamic:true }))
                         .setAuthor(message.author.tag, message.author.avatarURL())
                         message.channel.send({embed:embed});
                     }
@@ -392,7 +393,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
                         .setTitle("Şu an ki sıra:")
                         .setDescription(queue.songs.map((song, id) => `**${id + 1}**. ${song.name} - \`${song.formattedDuration}\``).slice(0, 10).join("\n"))
                         .setColor("GREEN")
-                        .setFooter("Created by Saxquatchx")
+                        .setAuthor( message.author.username,message.author.avatarURL({ dynamic:true }))
                         .setAuthor(message.author.tag, message.author.avatarURL())
                         message.channel.send(embed);
                     }
@@ -413,7 +414,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
     .setTitle("Şu anda oynatılıyor:")
     .setDescription(` \`${song.name}\` - \`${song.formattedDuration}\` \nŞunun tarafından istendi: ${song.user}\n${status(queue)}`)
     .setColor("GREEN")
-    .setFooter("Created by Saxquatchx")
+    .setAuthor( message.author.username,message.author.avatarURL({ dynamic:true }))
     .setAuthor(message.author.tag, message.author.avatarURL())
     message.channel.send(embed);
     }
@@ -421,9 +422,9 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
 
     .on("addSong", (message, queue, song) => {
     const embed = new Discord.MessageEmbed()
-    .setDescription(`${song.user} Tarafından Sıraya ${song.name} - \`${song.formattedDuration}\` isimli müzik eklendi :white_check_mark:`)
+    .setDescription(`${song.user} Tarafından Sıraya ${song.name} - \`${song.formattedDuration}\` isimli müzik eklendi  <a:yesiltk:749379707556069457>`)
     .setColor("BLUE")
-    .setFooter("Created by Saxquatchx")
+    .setAuthor( message.author.username,message.author.avatarURL({ dynamic:true }))
     .setAuthor(message.author.tag, message.author.avatarURL())
     message.channel.send(embed);
     })
@@ -432,7 +433,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
     const embed = new Discord.MessageEmbed()
     .setDescription(`Oynatılan playlist \`${playlist.name}\` oynatılan şarkı (${playlist.songs.length}).\nŞu kişi tarafından: ${song.user}\nŞimdi Oynatılıyor \`${song.name}\` - \`${song.formattedDuration}\`\n${status(queue)}`)
     .setColor("BLACK")
-    .setFooter("Created by Saxquatchx")
+    .setAuthor( message.author.username,message.author.avatarURL({ dynamic:true }))
     .setAuthor(message.author.tag, message.author.avatarURL())
     message.channel.send(embed);
     })
@@ -440,7 +441,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
     const embed = new Discord.MessageEmbed()
     .setDescription(`Eklendi \`${playlist.name}\` playlist (${playlist.songs.length} songs) sıraya\n${status(queue)}`)
     .setColor("#25DAC2")
-    .setFooter("Created by Saxquatchx")
+    .setAuthor( message.author.username,message.author.avatarURL({ dynamic:true }))
     .setAuthor(message.author.tag, message.author.avatarURL())
     message.channel.send(embed);
     })
@@ -450,7 +451,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
         const embed = new Discord.MessageEmbed()
         .setDescription(`**Bir şarkı seçin**\n${result.map(song => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``).join("\n")}\n*60 Saniye içinde girmelisiniz yoksa seçenekler iptal edilecektir*`)
         .setColor("#6B26C3")
-        .setFooter("Created by Saxquatchx")
+        .setAuthor( message.author.username,message.author.avatarURL({ dynamic:true }))
         .setAuthor(message.author.tag, message.author.avatarURL())
         message.channel.send(embed);
     })
@@ -459,7 +460,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
     const embed = new Discord.MessageEmbed()
     .setDescription("Arama iptal edildi")
     .setColor("RANDOM")
-    .setFooter("Created by Saxquatchx")
+    .setAuthor( message.author.username,message.author.avatarURL({ dynamic:true }))
     .setAuthor(message.author.tag, message.author.avatarURL())
     message.channel.send(embed)
     })

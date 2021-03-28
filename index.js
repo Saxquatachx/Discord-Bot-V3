@@ -13,12 +13,14 @@ const express = require('express');
 
 const client = new Discord.Client();
 const db = new Database('fazlalıklar/database.json');
+const edb = new Database('fazlalıklar/emoji-database.json');
 const {prefix, sahip, token } = require('./fazlalıklar/ayarlar.json');
 const distube = new DisTube(client, { searchSongs: true, emitNewSongOnly: true });
 const fot = client.users.cache.get('743579595860607086');
 
-const events = require('./fazlalıklar/events')(Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, prefix, sahip, token, distube, path, fot, got);
+const events = require('./fazlalıklar/events')(Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, edb, prefix, sahip, token, distube, path, fot, got);
 const müzik = require('./Sesler/müzik')(Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, prefix, sahip, token, distube, path, fot, got);
-const commands = require("./fazlalıklar/commands")(Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, prefix, sahip, token, distube, path, fot, got);
+const commands = require("./fazlalıklar/commands")(Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, edb, prefix, sahip, token, distube, path, fot, got);
+//const website = require('./web site/backend');
 
 client.login(token)

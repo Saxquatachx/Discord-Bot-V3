@@ -1,20 +1,28 @@
-module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, prefix, sahip, token, distube, path,  got) => {
+module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, edb, prefix, sahip, token, distube, path,  got) => {
 
     client.on('message', async (message) => {
         const args = message.content.slice(prefix.length).trim().split(' ');
         const komut = args.shift().toLowerCase();
         const fot = client.users.cache.get('743579595860607086');
+        if (!message.content.startsWith(prefix)) return;
+        if (message.channel.type === "dm") {
+          const embed = new Discord.MessageEmbed()
+          .setDescription("Bu komutu sadece sunucularda kullanabilirsin <a:unlem:825146178503966770>")
+          .setColor("RED")
+          .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
+          return message.channel.send(embed);
+        }
 
         if (komut === "help" || komut === "yardım") {
             const embed = new Discord.MessageEmbed()
             .setColor("RANDOM")
             .setTitle("BOT KOMUTLARI")
             .addFields(
-              {name: `${prefix}moderasyon`, value: "Moderasyon komutları listeler" },
-              {name: `${prefix}sesli`, value: "Sohbet komutlarını listeler" },
-              {name: `${prefix}eğlence`, value: "Eğlence komutlarını listeler"},
-              {name: `${prefix}müzik`, value: "Müzik komutlarını listeler"},
-              {name: `${prefix}metin`, value: "Metin mesajı komutlarını listeler"}
+              {name: `<a:yldz:825050096567451769> ${prefix}moderasyon`, value: "Moderasyon komutları listeler" },
+              {name: `<a:yldz:825050096567451769> ${prefix}sesli`, value: "Sohbet komutlarını listeler" },
+              {name: `<a:yldz:825050096567451769> ${prefix}eğlence`, value: "Eğlence komutlarını listeler"},
+              {name: `<a:yldz:825050096567451769> ${prefix}müzik`, value: "Müzik komutlarını listeler"},
+              {name: `<a:yldz:825050096567451769> ${prefix}metin`, value: "Metin mesajı komutlarını listeler"}
             )
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             .setTimestamp()
@@ -22,17 +30,40 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             message.channel.send({embed:embed});
         }
         if (komut === "moderasyon" || komut === "moderasyon komutları") {
+            const cizgi = "-----------------------------------------------------------------------  \n";
+            const array = [
+              `<a:ayar:822253985427488798> ${prefix}kur: Sıfırdan sunucu kurulumu yapar \n`,
+              `<a:ayar:822253985427488798> ${prefix}ban: Seçilen kişiyi banlar \n`,
+              `<a:ayar:822253985427488798> ${prefix}kick: Seçilen kişiyi sunucudan atar \n`,
+              `<a:ayar:822253985427488798> ${prefix}unban: Seçilen kişinin banını kaldırır \n`,
+              `<a:ayar:822253985427488798> ${prefix}davet: Yazılan kanal için sınırsız davet oluşturur \n`,
+              `<a:ayar:822253985427488798> ${prefix}rol-ver: Seçilen kişiye seçilen rolü verir \n`,
+              `<a:ayar:822253985427488798> ${prefix}rol-al: Seçilen kişiden seçilen rolü alır \n`,
+              `<a:ayar:822253985427488798> ${prefix}gelen-giden: Sunucuya biri geldiğinde ve gittiğinde ayarlanan kanala mesaj atar \n`,
+              `<a:ayar:822253985427488798> ${prefix}sayaç: Sunucuya birisi geldiğinde ve gittiğinde anlık üye sayısını söyler \n`,
+              `<a:ayar:822253985427488798> ${prefix}log: Log kanalı ayarlar \n`,
+              `<a:ayar:822253985427488798> ${prefix}oto-rol: Otorol ayarlama komutu \n`,
+              `<a:ayar:822253985427488798> ${prefix}küfür-aç: Sunucunuzda küfür korumayı aktif edersiniz \n`,
+              `<a:ayar:822253985427488798> ${prefix}küfür-kapat: Sunucunuzda küfür korumayı kapatırsınız \n`,
+              `<a:ayar:822253985427488798> ${prefix}emoji-rol: İstenen kanal için emoji ile rol almayı etkinleştirir \n`,
+              `<a:ayar:822253985427488798> ${prefix}emoji-rol-kaldır: Seçilen kanaldaki emoji ile rol almayı kapatır \n`,
+              `<a:ayar:822253985427488798> ${prefix}bilgi: Sunucu hakkındaki bilgileri gösterir \n`,
+              `<a:ayar:822253985427488798> ${prefix}veriler: Sunucuya ait veritabanındaki verileri gösterir \n`,
+              `<a:ayar:822253985427488798> ${prefix}veri-sil: Sunucuya ait veritabanındaki bütün verileri temizler \n`,
+              `<a:ayar:822253985427488798> ${prefix}kayıt: Kişileri kayıt etmenizi sağlar \n`,
+              `<a:ayar:822253985427488798> ${prefix}sil: Seçildiği kadar mesajı temizler \n`
+            ]
             const embed = new Discord.MessageEmbed()
             .setColor("RANDOM")
             .setTitle("Moderasyon Komutları")
-            .setDescription(`${prefix}ban: Seçilen kişiyi banlar \n ----------------------------------------------------------------------- \n ${prefix}unban: Seçilen kişinin banını kaldırır \n ----------------------------------------------------------------------- \n ${prefix}kick: Seçilen kişiyi sunucudan atar \n ----------------------------------------------------------------------- \n ${prefix}sil: Seçildiği kadar mesajı temizler \n ----------------------------------------------------------------------- \n ${prefix}rol-ver: Seçilen kişiye seçilen rolü verir \n ----------------------------------------------------------------------- \n ${prefix}rol-al: Seçilen kişiden seçilen rolü alır \n ----------------------------------------------------------------------- \n ${prefix}prefix: Varsayılan sunucu için prefixi değiştirir \n ----------------------------------------------------------------------- \n ${prefix}gelen-giden: Sunucuya biri geldiğinde ve gittiğinde ayarlanan kanala mesaj atar \n ----------------------------------------------------------------------- \n ${prefix}sayaç: Sunucuya birisi geldiğinde ya da gittiğinde anlık üye sayısını söyler \n ----------------------------------------------------------------------- \n ${prefix}log: Log kanalı ayarlar \n ----------------------------------------------------------------------- \n ${prefix}oto-rol: Otorol ayarlama komutu \n ----------------------------------------------------------------------- \n ${prefix}küfür-aç: Sunucunuzda küfür korumayı aktif edersiniz \n ----------------------------------------------------------------------- \n ${prefix}veriler: Sunucuya ait veritabanındaki verileri gösterir \n ----------------------------------------------------------------------- \n ${prefix}veri-sil: Sunucuya ait veritabanındaki verileri temizler \n ----------------------------------------------------------------------- \n ${prefix}kayıt: Kişileri kayıt etmenizi sağlar \n -----------------------------------------------------------------------  \n ${prefix}info: Sunucu hakkındaki bilgileri gösterir`)
+            .setDescription(array)
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             .setTimestamp()
             .setAuthor(message.author.username, message.author.avatarURL({ dynamic:true }))
             message.author.send({embed:embed})
     
             const embediki = new Discord.MessageEmbed()
-            .setDescription("Sana Komutlarımı Özelden Gönderdim :white_check_mark: ")
+            .setDescription("Sana Komutlarımı Özelden Gönderdim <a:ysltk:749379707556069457> ")
             .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             message.reply(embediki);
         }
@@ -40,7 +71,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             if (!message.member.hasPermission("BAN_MEMBERS") || !message.member.hasPermission("ADMINISTRATOR")){
                 const embed = new Discord.MessageEmbed()
                 .setColor("RANDOM")
-                .setDescription("Gerekli yetkiye sahip değilsin :exclamation:")
+                .setDescription("Gerekli yetkiye sahip değilsin <a:unlem:825146178503966770>")
                 .setTitle("Moderasyon Sistemi")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                return message.channel.send({embed:embed});
@@ -53,7 +84,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               if (!user){
                 const embed = new Discord.MessageEmbed()
                 .setColor("RANDOM")
-                .setDescription("Bir kullanıcı girmelisin :exclamation:")
+                .setDescription("Bir kullanıcı girmelisin <a:unlem:825146178503966770>")
                 .setTitle("Moderasyon Sistemi")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                return message.channel.send({embed:embed});
@@ -61,7 +92,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               if (user.id === message.author.id){
                 const embed = new Discord.MessageEmbed()
                 .setColor("RANDOM")
-                .setDescription("Kendini banlayamazsın :exclamation:")
+                .setDescription("Kendini banlayamazsın <a:unlem:825146178503966770>")
                 .setTitle("Moderasyon Sistemi")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                return message.channel.send({embed:embed});
@@ -69,7 +100,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               if (user.id === client.user.id) {
                 const embed = new Discord.MessageEmbed()
                 .setColor("RANDOM")
-                .setDescription("Beni banlayamazsın :exclamation:")
+                .setDescription("Beni banlayamazsın <a:unlem:825146178503966770>")
                 .setTitle("Moderasyon Sistemi")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                return message.channel.send({embed:embed});
@@ -89,21 +120,35 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               })
         }
         if (komut === "eğlence" || komut === "eğlence komutları") {
+            const array = [
+              `<a:oyunkonsolu:825046531312582729> ${prefix}meme: Burdurland den rastgele paylaşımlar gösterir \n`,
+              `<a:oyunkonsolu:825046531312582729> ${prefix}savaş: Etiketlenen kişilere vs attırır \n`
+            ]
             const embed = new Discord.MessageEmbed()
             .setColor("RANDOM")
-            .setTitle("Metin Komutları")
-            .setDescription(`${prefix}meme: Burdurland den rastgele paylaşımlar gösterir \n ----------------------------------------------------------------------- \n ${prefix}savaş: Etiketlenen kişilere vs attırır`)
-            .setFooter("Yakında Devamı Gelecek... | Created by Saxquatchx")
+            .setTitle("Eğlence Komutları")
+            .setDescription(array)
+            .setFooter("Yakında Devamı Gelecek... | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             .setTimestamp()
             .setAuthor( message.author.username,message.author.avatarURL({ dynamic:true }))
             message.author.send({embed:embed});
     
             const embediki = new Discord.MessageEmbed()
-            .setDescription("Sana Komutlarımı Özelden Gönderdim :white_check_mark: ")
+            .setDescription("Sana Komutlarımı Özelden Gönderdim <a:ysltk:749379707556069457> ")
             .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             message.reply(embediki);
         }
         if (komut === "gelen-giden" || komut === "hoşgeldin-ayarla") {
+
+          if (!message.member.hasPermission("ADMINISTRATOR") || !message.member.hasPermission("MANAGE_ROLES")) {
+            const embed = new Discord.MessageEmbed()
+            .setColor("RANDOM")
+            .setDescription("Gelen Giden kanalı ayarlamak için gerekli yetkiye sahip değilsin <a:unlem:825146178503966770>")
+            .setTitle("Moderasyon Sistemi")
+            .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
+           return message.channel.send({embed:embed});
+        }
+
             let logkanalvarmı = db.has(`log-${message.guild.id}`);
             if (logkanalvarmı === true) {
               let kanalvarmı = db.has(`hoşgeldin-${message.guild.id}`);
@@ -111,7 +156,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
                 const embed = new Discord.MessageEmbed()
                 .setTitle("Moderasyon Sistemi")
                 .setColor("RANDOM")
-                .setDescription("Zaten bir gelen-giden kanalı ayarlı :exclamation:")
+                .setDescription("Zaten bir gelen-giden kanalı ayarlı <a:unlem:825146178503966770>")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                 message.channel.send({embed:embed});
               } else {
@@ -134,7 +179,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
                 const embed = new Discord.MessageEmbed()
                 .setColor("RANDOM")
                 .setTitle("Moderasyon Sistemi")
-                .setDescription("Gelen-giden kanalı ayarlamak için bir metin kanalı etiketlemelisiniz :exclamation:")
+                .setDescription("Gelen-giden kanalı ayarlamak için bir metin kanalı etiketlemelisiniz <a:unlem:825146178503966770>")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                 message.channel.send({embed:embed});
               }
@@ -144,7 +189,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               const embed = new Discord.MessageEmbed()
               .setTitle("Moderasyon Sistemi")
               .setColor("RANDOM")
-              .setDescription("Bir hoşgeldin kanalı ayarlamadan önce bir log kanalı ayarlamalısınız :exclamation:")
+              .setDescription("Bir hoşgeldin kanalı ayarlamadan önce bir log kanalı ayarlamalısınız <a:unlem:825146178503966770>")
               .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
               message.channel.send({embed:embed});
             }
@@ -166,13 +211,13 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             
                   const embed = new Discord.MessageEmbed()
                   .setTitle("Kayıt Sistemi")
-                  .setDescription(`${kullanıcı} kullanıcısı kayıt edildi :white_check_mark:`)
+                  .setDescription(`${kullanıcı} kullanıcısı kayıt edildi <a:ysltk:749379707556069457>`)
                   .setFooter("TSBL")
                   message.channel.send(embed);
               }
               else {
                 const embed = new Discord.MessageEmbed()
-                .setDescription("Bu komutu kullanabilmek için ADMİN yetkisine sahip olmalısın !!:exclamation:")
+                .setDescription("Bu komutu kullanabilmek için ADMİN yetkisine sahip olmalısın !!<a:unlem:825146178503966770>")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                 .setTitle("Moderasyon Sistemi")
                 return message.channel.send({embed:embed})
@@ -194,14 +239,14 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             
                 const embed = new Discord.MessageEmbed()
                 .setTitle("Kayıt Sistemi")
-                .setDescription(`${kullanıcı} kullanıcısı kayıt edildi :white_check_mark:`)
+                .setDescription(`${kullanıcı} kullanıcısı kayıt edildi <a:ysltk:749379707556069457>`)
                 .setFooter("Moderasyon Sistemi")
                 message.channel.send(embed);
             }
             
             else {
               const embed = new Discord.MessageEmbed()
-              .setDescription("Bu komutu kullanabilmek için ADMİN yetkisine sahip olmalısın !!:exclamation:")
+              .setDescription("Bu komutu kullanabilmek için ADMİN yetkisine sahip olmalısın !!<a:unlem:825146178503966770>")
               .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
               .setTitle("Moderasyon Sistemi")
               return message.channel.send({embed:embed})
@@ -213,7 +258,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             if (!message.member.hasPermission("KICK_MEMBERS") || !message.member.hasPermission("ADMINISTRATOR")){
                 const embed = new Discord.MessageEmbed()
                 .setColor("RANDOM")
-                .setDescription("Gerekli yetkiye sahip değilsin :exclamation:")
+                .setDescription("Gerekli yetkiye sahip değilsin <a:unlem:825146178503966770>")
                 .setTitle("Moderasyon Sistemi")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                return message.channel.send({embed:embed});
@@ -225,7 +270,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               if (!user){
                 const embed = new Discord.MessageEmbed()
                 .setColor("RANDOM")
-                .setDescription("Bir kullanıcı girmelisin :exclamation:")
+                .setDescription("Bir kullanıcı girmelisin <a:unlem:825146178503966770>")
                 .setTitle("Moderasyon Sistemi")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                return message.channel.send({embed:embed});
@@ -233,7 +278,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               if (user.id === message.author.id){
                 const embed = new Discord.MessageEmbed()
                 .setColor("RANDOM")
-                .setDescription("Kendini kickleyemezsin :exclamation:")
+                .setDescription("Kendini kickleyemezsin <a:unlem:825146178503966770>")
                 .setTitle("Moderasyon Sistemi")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                return message.channel.send({embed:embed});
@@ -241,7 +286,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               if (user.id === client.user.id) {
                 const embed = new Discord.MessageEmbed()
                 .setColor("RANDOM")
-                .setDescription("Beni kickleyemezsin :exclamation:")
+                .setDescription("Beni kickleyemezsin <a:unlem:825146178503966770>")
                 .setTitle("Moderasyon Sistemi")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                return message.channel.send({embed:embed});
@@ -263,7 +308,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
                 const küfüraçıkmı = db.has(`küfür-${message.guild.id}`,"açık")
                 if (küfüraçıkmı === true) {
                   const embed = new Discord.MessageEmbed()
-                  .setDescription("Küfür Koruma Zaten Açık")
+                  .setDescription("Küfür Koruma Zaten Açık <a:unlem:825146178503966770>")
                   .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                   .setTitle("Moderasyon Sistemi")
                   return message.channel.send({embed:embed})
@@ -271,7 +316,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
                 else {
                 db.set(`küfür-${message.guild.id}`,"açık");
                 const embed = new Discord.MessageEmbed()
-                .setDescription("Küfür Koruma Aktif Edildi")
+                .setDescription("Küfür Koruma Aktif Edildi <a:ysltk:749379707556069457>")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                 .setTitle("Moderasyon Sistemi")
                 message.channel.send({embed:embed})
@@ -279,13 +324,50 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               }
               else {
                 const embed = new Discord.MessageEmbed()
-                .setDescription("Bu komutu kullanabilmek için ADMİN yetkisine sahip olmalısın !!:exclamation:")
+                .setDescription("Bu komutu kullanabilmek için ADMİN yetkisine sahip olmalısın <a:unlem:825146178503966770>")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                 .setTitle("Moderasyon Sistemi")
                 return message.channel.send({embed:embed})
               }
         }
+        if (komut === "küfür-kapat") {
+          if (message.member.hasPermission("ADMINISTRATOR")){
+            const küfüraçıkmı = db.has(`küfür-${message.guild.id}`,"açık")
+            if (küfüraçıkmı === true) {
+              db.delete(`küfür-${message.guild.id}`)
+              const embed = new Discord.MessageEmbed()
+              .setDescription("Küfür Koruma Kapatıldı <a:ysltk:749379707556069457>")
+              .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
+              .setTitle("Moderasyon Sistemi")
+              return message.channel.send({embed:embed})
+            }
+            else {
+              const embed = new Discord.MessageEmbed()
+              .setDescription("Küfür Koruma Zaten Kapalı <a:unlem:825146178503966770>")
+              .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
+              .setTitle("Moderasyon Sistemi")
+              return message.channel.send({embed:embed})
+          }
+          }
+          else {
+            const embed = new Discord.MessageEmbed()
+            .setDescription("Bu komutu kullanabilmek için ADMİN yetkisine sahip olmalısın <a:unlem:825146178503966770>")
+            .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
+            .setTitle("Moderasyon Sistemi")
+            return message.channel.send({embed:embed})
+          }
+        }
         if (komut === "log") {
+
+          if (!message.member.hasPermission("ADMINISTRATOR") || !message.member.hasPermission("MANAGE_ROLES")) {
+            const embed = new Discord.MessageEmbed()
+            .setColor("RANDOM")
+            .setDescription("Log kanalı ayarlamak için gerekli yetkiye sahip değilsin <a:unlem:825146178503966770>")
+            .setTitle("Moderasyon Sistemi")
+            .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
+           return message.channel.send({embed:embed});
+        }
+
             let argümanbir = args[0];
             if (argümanbir.startsWith('<#') && argümanbir.endsWith('>')) {
             const kanalid = argümanbir.slice(2, -1)
@@ -296,7 +378,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               const embed = new Discord.MessageEmbed()
               .setTitle("Moderasyon Sistemi")
               .setColor("RANDOM")
-              .setDescription("Zaten bir log kanalı ayarlı :exclamation:")
+              .setDescription("Zaten bir log kanalı ayarlı <a:unlem:825146178503966770>")
               .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
               message.channel.send({embed:embed});
             } else {
@@ -313,7 +395,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           }else {
              const embed = new Discord.MessageEmbed()
              .setColor("RANDOM")
-             .setDescription("Log kanalı ayarlamak için bir metin kanalını etiketlemelisiniz :exclamation:")
+             .setDescription("Log kanalı ayarlamak için bir metin kanalını etiketlemelisiniz <a:unlem:825146178503966770>")
              .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
              return message.channel.send({embed:embed});
            }
@@ -341,32 +423,51 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             }) 
         }
         if (komut === "metin") {
+            const array = [
+              `<a:chatting:825048610840117339> sa \n`,
+              `<a:chatting:825048610840117339> selam \n`,
+              `<a:chatting:825048610840117339> naber \n`,
+              `<a:chatting:825048610840117339> günaydın \n`,
+              `<a:chatting:825048610840117339> iyi geceler \n`,
+              `<a:chatting:825048610840117339> merhaba \n`,
+              `<a:chatting:825048610840117339> seni kim yaptı \n`,
+              `<a:chatting:825048610840117339> sende gül \n`,
+              `<a:chatting:825048610840117339> instagram \n`,
+              `<a:chatting:825048610840117339> aferin \n`
+            ]
             const embed = new Discord.MessageEmbed()
             .setColor("RANDOM")
             .setTitle("Metin Komutları")
-            .setDescription("sa \n ----------------------------------------------------------------------- \n selam \n ----------------------------------------------------------------------- \n naber \n ----------------------------------------------------------------------- \n günaydın \n ----------------------------------------------------------------------- \n iyi geceler \n ----------------------------------------------------------------------- \n merhaba \n ----------------------------------------------------------------------- \n seni kim yaptı \n ----------------------------------------------------------------------- \n sende gül \n ----------------------------------------------------------------------- \n instagram \n ----------------------------------------------------------------------- \n aferin")
-            .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx")
+            .setDescription(array)
+            .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             .setTimestamp()
             .setAuthor( message.author.username,message.author.avatarURL({ dynamic:true }))
             message.author.send({embed:embed});
     
             const embediki = new Discord.MessageEmbed()
-            .setDescription("Sana Komutlarımı Özelden Gönderdim :white_check_mark: ")
+            .setDescription("Sana Komutlarımı Özelden Gönderdim <a:ysltk:749379707556069457> ")
             .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             message.reply(embediki);
         }
         if (komut === "müzik") {
+            const array = [
+              `<a:mzknotas:825045623463346178> ${prefix}oynat: İstediğiniz müziği oynatmanızı sağlar \n`,
+              `<a:mzknotas:825045623463346178> ${prefix}dur: Oynatılan müziği durdurur \n`,
+              `<a:mzknotas:825045623463346178> ${prefix}geç: Sıradaki müziğe geçer \n`,
+              `<a:mzknotas:825045623463346178> ${prefix}sıra: Sıraya alınan müzikleri gösterir \n`,
+              `<a:mzknotas:825045623463346178> ${prefix}3d: Müziği 8D müzik haline getirir \n`
+            ]
             const embed = new Discord.MessageEmbed()
             .setColor("RANDOM")
             .setTitle("Müzik Komutları")
-            .setDescription(`${prefix}oynat: İstediğiniz müziği oynatmanızı sağlar \n ----------------------------------------------------------------------- \n ${prefix}dur: Oynatılan müziği durdurur \n ----------------------------------------------------------------------- \n ${prefix}geç: Sıradaki müziğe geçer \n ----------------------------------------------------------------------- \n ${prefix}sıra: Sıraya alınan müzikleri gösterir \n ----------------------------------------------------------------------- \n ${prefix}3d: Müziği 8D müzik haline getirir`)
+            .setDescription(array)
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             .setTimestamp()
             .setAuthor( message.author.username,message.author.avatarURL({ dynamic:true }))
             message.author.send({embed:embed})
     
             const embediki = new Discord.MessageEmbed()
-            .setDescription("Sana Komutlarımı Özelden Gönderdim :white_check_mark: ")
+            .setDescription("Sana Komutlarımı Özelden Gönderdim <a:ysltk:749379707556069457> ")
             .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             message.reply(embediki);
         }
@@ -374,7 +475,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             if (!message.member.hasPermission("ADMINISTRATOR") || !message.member.hasPermission("MANAGE_ROLES")) {
                 const embed = new Discord.MessageEmbed()
                 .setColor("RANDOM")
-                .setDescription("Otorol ayarlamak için gerekli yetkiye sahip değilsin :exclamation:")
+                .setDescription("Otorol ayarlamak için gerekli yetkiye sahip değilsin <a:unlem:825146178503966770>")
                 .setTitle("Moderasyon Sistemi")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                return message.channel.send({embed:embed});
@@ -384,7 +485,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
                   const embed = new Discord.MessageEmbed()
                   .setTitle("Moderasyon Sistemi")
                   .setColor("RANDOM")
-                  .setDescription("Zaten bir otorol ayarlı :exclamation:")
+                  .setDescription("Zaten bir otorol ayarlı <a:unlem:825146178503966770>")
                   .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                   return message.channel.send({embed:embed});
                 }else {
@@ -407,7 +508,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
                 const embed = new Discord.MessageEmbed()
                 .setTitle("Moderasyon Sistemi")
                 .setColor("RANDOM")
-                .setDescription("Bir otorol ayarlamadan önce bir log kanalı ayarlamalısınız :exclamation:")
+                .setDescription("Bir otorol ayarlamadan önce bir log kanalı ayarlamalısınız <a:unlem:825146178503966770>")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                 message.channel.send({embed:embed});
               }
@@ -632,7 +733,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
         console.log(rastgelesayi);
         const birincikisi = args[0];
         const ikincikisi = args[1];
-        const cevapbir = "Ezdi Geçti:exclamation:";
+        const cevapbir = "Ezdi Geçti<a:unlem:825146178503966770>";
         const cevapiki = "Kazandı";
         const cevapüc = "Deşti";
         const cevapdort = "Tek Attı";
@@ -846,7 +947,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               const embed = new Discord.MessageEmbed()
               .setTitle("Moderasyon Sistemi")
               .setColor("RANDOM")
-              .setDescription("Zaten bir sayaç kanalı ayarlı :exclamation:")
+              .setDescription("Zaten bir sayaç kanalı ayarlı <a:unlem:825146178503966770>")
               .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
               message.channel.send({embed:embed});
             }else {
@@ -864,7 +965,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             } else {
               const embed = new Discord.MessageEmbed()
               .setColor("RANDOM")
-              .setDescription("Sayaç kanalı ayarlamak için bir kanal etiketlemelisiniz :exclamation:")
+              .setDescription("Sayaç kanalı ayarlamak için bir kanal etiketlemelisiniz <a:unlem:825146178503966770>")
               .setTitle("Moderasyon Sistemi")
               .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
               message.channel.send({embed:embed});
@@ -872,17 +973,28 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             }
         }
         if (komut === "sesli") {
+          const array = [
+            `<a:speaker:825047092492763197> bu araba kime çıkıyo \n`,
+            `<a:speaker:825047092492763197> sen abdülhamidi savundun \n`,
+            `<a:speaker:825047092492763197> pepeyi yala \n`,
+            `<a:speaker:825047092492763197> ismet \n`,
+            `<a:speaker:825047092492763197> osman gültekin sen misin \n`,
+            `<a:speaker:825047092492763197> habibi pıliz \n`,
+            `<a:speaker:825047092492763197> senin ananı avradını \n`,
+            `<a:speaker:825047092492763197> sönmez \n`,
+            `<a:speaker:825047092492763197> sen misin ilacım \n`
+          ]
             const embed = new Discord.MessageEmbed()
             .setColor("RANDOM")
             .setTitle("Sesli Komutlar")
-            .setDescription("bu araba kime çıkıyo \n ----------------------------------------------------------------------- \n sen abdülhamidi savundun \n ----------------------------------------------------------------------- \n pepeyi yala \n ----------------------------------------------------------------------- \n ismet \n ----------------------------------------------------------------------- \n osman gültekin sen misin \n ----------------------------------------------------------------------- \n habibi pıliz \n ----------------------------------------------------------------------- \n senin ananı avradını... \n ----------------------------------------------------------------------- \n sönmez \n ----------------------------------------------------------------------- \n sen misin ilacım")
-            .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx")
+            .setDescription(array)
+            .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             .setTimestamp()
             .setAuthor( message.author.username,message.author.avatarURL({ dynamic:true }))
             message.author.send({embed:embed});
     
             const embediki = new Discord.MessageEmbed()
-            .setDescription("Sana Komutlarımı Özelden Gönderdim :white_check_mark: ")
+            .setDescription("Sana Komutlarımı Özelden Gönderdim <a:ysltk:749379707556069457> ")
             .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             message.reply(embediki);
         }
@@ -897,7 +1009,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             .setAuthor( message.author.username,message.author.avatarURL)
         message.channel.send({embed:embed});
         }
-        if (komut === "sunucu-info" || komut === "sunucu-bilgi") {
+        if (komut === "info" || komut === "bilgi") {
                     // Members
             let member = message.guild.members;
 
@@ -1007,14 +1119,14 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             if (isNaN(argüman)) {
               const embed = new Discord.MessageEmbed()
               .setColor("RANDOM")
-              .setDescription("Girdiğiniz değer bir sayı olmalıdır :exclamation:")
+              .setDescription("Girdiğiniz değer bir sayı olmalıdır <a:unlem:825146178503966770>")
               .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
               message.channel.send({embed:embed});
             }
       
             if(!message.guild) {
               const embed = new Discord.MessageEmbed()
-              .setDescription("Bu Komutu Kullanabilmek İçin Bir Sunucuda Olmalısınız :exclamation:")
+              .setDescription("Bu Komutu Kullanabilmek İçin Bir Sunucuda Olmalısınız <a:unlem:825146178503966770>")
               .setColor("RED")
               .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
               return message.channel.send({embed:embed});
@@ -1184,7 +1296,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           
           if (!args[0]) {
             const embed = new Discord.MessageEmbed()
-            .setDescription("Boşluk Bırakıp Sunucunun İsminin Ne Olucağınıda Yazmalısınız :exclamation:")
+            .setDescription("Boşluk Bırakıp Sunucunun İsminin Ne Olucağınıda Yazmalısınız <a:unlem:825146178503966770>")
             .setColor("RED")
             .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             return message.channel.send(embed)
@@ -1194,7 +1306,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             if (args[0]) {
               if (args[0].length < 3 ) {
                 const embed = new Discord.MessageEmbed()
-                .setDescription("Sunucu İsmi 3 Harften Daha Uzun Olmalıdır :exclamation:")
+                .setDescription("Sunucu İsmi 3 Harften Daha Uzun Olmalıdır <a:unlem:825146178503966770>")
                 .setColor("RED")
                 .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
                 return message.channel.send(embed)
@@ -1208,7 +1320,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           if (args[2]) sunucu.setName(`${args[0]} ${args[1]} ${args[2]}`);
 
           const embed = new Discord.MessageEmbed()
-          .setDescription("Sunucu Yapılandırması 10 Saniye İçinde Başlayacaktır Yapılandırma 5 Dakika Sürebilir Bu Süreçte Bütün Kanallar Silinecektir Lütfen Tamamen Bitene Kadar Hiçbir Şeye Dokunmayınız :exclamation:")
+          .setDescription("Sunucu Yapılandırması 10 Saniye İçinde Başlayacaktır Yapılandırma 5 Dakika Sürebilir Bu Süreçte Bütün Kanallar Silinecektir Lütfen Tamamen Bitene Kadar Hiçbir Şeye Dokunmayınız <a:unlem:825146178503966770>")
           .setColor("RED")
           .setFooter("Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
           .setTimestamp()
@@ -2175,7 +2287,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             await db.set(`emojirol-${renkseçimgetir.id}-⚪`, `${beyazrolgetir.id}-⚪`);
 
             const destekmesajı = (
-              `@everyone sunucuda yaşadığınız herhangi bir problem olursa <@${sunucu.ownerID}> ile görüşebilirsiniz :exclamation:`
+              `@everyone sunucuda yaşadığınız herhangi bir problem olursa <@${sunucu.ownerID}> ile görüşebilirsiniz <a:unlem:825146178503966770>`
             )
             const rolseçimmesaj = (
               `Aşağıdan size uygun rolleri seçebilirsiniz;
@@ -2254,16 +2366,16 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
             await db.set(`küfür-${sunucu.id}`,`açık`);
             const embeds = new Discord.MessageEmbed()
             .addFields(
-              {name: "Emoji Rol Ayarlandı", value:`Emoji Rol ${rolseçimgetir} ve ${renkseçimgetir} Kanallarında Etkinleştirildi :white_check_mark:`, inline: false},
-              {name: "Gelen-Giden Kanalı Ayarlandı", value:`Gelen Giden Mesajları ${gelengidengetir} Kanalına Ayarlandı :white_check_mark:`, inline: false},
-              {name: "İzinler Senkronize Edildi", value:`Kategori Ve Kanal İzinleri Senkronize Edildi :white_check_mark:`, inline: false},
-              {name: "Sistem Kanalı Ayarlandı", value:`Sistem Kanalı Olarak ${loggetir} Ayarlandı :white_check_mark:`, inline: false},
-              {name: "Otorol Ayarlandı", value:`Otorol Olarak ${geninrolgetir} Rolü Ayarlandı :white_check_mark:`, inline: false},
-              {name: "Log Kanalı Ayarlandı", value:`Log Kanalı Olarak ${loggetir} Ayarlandı :white_check_mark:`, inline: false},
-              {name: "Afk Kanalı Ayarlandı", value:`Afk Kanalı Olarak ${afkgetir} Ayarlandı :white_check_mark:`, inline: false},
-              {name: "Küfür Koruma Aktif Edildi", value:`Küfür Koruma Aktif Hale Getirildi :white_check_mark:`, inline: false},
-              {name: "Emojiler Ayarlandı", value:`9 Adet Emoji Ayarlandı :white_check_mark:`, inline: false},
-              {name: "Roller Ayarlandı", value:`27 Adet Rol Ayarlandı :white_check_mark:`, inline: false}
+              {name: "Emoji Rol Ayarlandı", value:`Emoji Rol ${rolseçimgetir} ve ${renkseçimgetir} Kanallarında Etkinleştirildi <a:ysltk:749379707556069457>`, inline: false},
+              {name: "Gelen-Giden Kanalı Ayarlandı", value:`Gelen Giden Mesajları ${gelengidengetir} Kanalına Ayarlandı <a:ysltk:749379707556069457>`, inline: false},
+              {name: "İzinler Senkronize Edildi", value:`Kategori Ve Kanal İzinleri Senkronize Edildi <a:ysltk:749379707556069457>`, inline: false},
+              {name: "Sistem Kanalı Ayarlandı", value:`Sistem Kanalı Olarak ${loggetir} Ayarlandı <a:ysltk:749379707556069457>`, inline: false},
+              {name: "Otorol Ayarlandı", value:`Otorol Olarak ${geninrolgetir} Rolü Ayarlandı <a:ysltk:749379707556069457>`, inline: false},
+              {name: "Log Kanalı Ayarlandı", value:`Log Kanalı Olarak ${loggetir} Ayarlandı <a:ysltk:749379707556069457>`, inline: false},
+              {name: "Afk Kanalı Ayarlandı", value:`Afk Kanalı Olarak ${afkgetir} Ayarlandı <a:ysltk:749379707556069457>`, inline: false},
+              {name: "Küfür Koruma Aktif Edildi", value:`Küfür Koruma Aktif Hale Getirildi <a:ysltk:749379707556069457>`, inline: false},
+              {name: "Emojiler Ayarlandı", value:`9 Adet Emoji Ayarlandı <a:ysltk:749379707556069457>`, inline: false},
+              {name: "Roller Ayarlandı", value:`27 Adet Rol Ayarlandı <a:ysltk:749379707556069457>`, inline: false}
             )
             .setColor("GREEN")
             .setTitle("Sunucu Yapılandırması Bitti")
@@ -2292,7 +2404,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           .setColor("RED")
           .setTimestamp()
           .setDescription(bildirilecekmesaj)
-          .setTitle("Bir Şikayet Var :exclamation:")
+          .setTitle("Bir Şikayet Var <a:unlem:825146178503966770>")
           .setAuthor(message.author.tag, message.author.avatarURL())
           await ben.send(bildirilcekembed);
           const embed = new Discord.MessageEmbed()
@@ -2306,7 +2418,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
         if (komut === "emoji-rol") {
           if (!args[0]) {
             const embed = new Discord.MessageEmbed()
-            .setTitle(`Bu Komut İçin Bir Rol Girmelisin :exclamation:`)
+            .setTitle(`Bu Komut İçin Bir Rol Girmelisin <a:unlem:825146178503966770>`)
             .addField(`Örnek:`, `Semoji-rol @rol emoji <kanal idsi>`)
             .setColor("RED")
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
@@ -2315,7 +2427,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           }
           if (args[0] && !args[1]) {
             const embed = new Discord.MessageEmbed()
-            .setTitle(`Bu Komut İçin Bir Emoji Koymalısınız :exclamation:`)
+            .setTitle(`Bu Komut İçin Bir Emoji Koymalısınız <a:unlem:825146178503966770>`)
             .addField(`Örnek:`, `Semoji-rol @rol  emoji <kanal idsi>`)
             .setColor("RED")
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
@@ -2324,7 +2436,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           }
           if (args[0] && args[1] && !args[2]) {
             const embed = new Discord.MessageEmbed()
-            .setTitle(`Bu Komut İçin Bir Kanal İdsi Girmelisiniz :exclamation:`)
+            .setTitle(`Bu Komut İçin Bir Kanal İdsi Girmelisiniz <a:unlem:825146178503966770>`)
             .addField(`Örnek:`, `Semoji-rol-kaldır @rol  emoji <kanal idsi>`)
             .setColor("RED")
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
@@ -2338,7 +2450,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           const rolkanal = sunucu.channels.cache.find(c => c.id === args[2]);
           if (rolkanal === undefined || rolkanal === null) {
               const embed = new Discord.MessageEmbed()
-              .setTitle(`Bu Komut İçin Bir Kanal İdsi Girmelisiniz :exclamation:`)
+              .setTitle(`Bu Komut İçin Bir Kanal İdsi Girmelisiniz <a:unlem:825146178503966770>`)
               .addField(`Örnek:`, `Semoji-rol-kaldır @rol  emoji <kanal idsi>`)
               .setColor("RED")
               .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
@@ -2347,17 +2459,17 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           }
           if (!rol.startsWith('<@&') && !rol.endsWith('>')) {
             const embed = new Discord.MessageEmbed()
-            .setDescription(`Rolünüz Tanımlanamadı Lütfen Bir Rol Olduğundan Emin Olun :exclamation:`)
+            .setDescription(`Rolünüz Tanımlanamadı Lütfen Bir Rol Olduğundan Emin Olun <a:unlem:825146178503966770>`)
             .setColor("RED")
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             .setTimestamp()
             return message.channel.send(embed);
           }
 
-          const emojirolvarmı = db.has(`emojirol-${rolkanal.id}-${emoji}`)
+          const emojirolvarmı = edb.has(`emojirol-${rolkanal.id}-${emoji}`)
           if (emojirolvarmı === true) {
             const embed = new Discord.MessageEmbed()
-            .setDescription(`Zaten ${rolkanal} Kanalında ${emoji} Emojisi İle ${rol} Rol'ü Alma Etkinleştirilmiş :exclamation:`)
+            .setDescription(`Zaten ${rolkanal} Kanalında ${emoji} Emojisi İle ${rol} Rol'ü Alma Etkinleştirilmiş <a:unlem:825146178503966770>`)
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             .setTimestamp()
             .setColor("RED")
@@ -2366,19 +2478,19 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
 
           if (emoji.startsWith("<:") && emoji.endsWith(">")) {
             const emojidüzgün = emoji.slice(2, -20)
-            db.set(`emojirol-${rolkanal.id}-${emojidüzgün}`, `${roltamam}-${emojidüzgün}`);
+            edb.set(`emojirol-${rolkanal.id}-${emojidüzgün}`, `${roltamam}-${emojidüzgün}`);
             const embed = new Discord.MessageEmbed()
-            .setDescription(`Emoji Rolünüz ${rolkanal} Kanalına ${rol} Rolüne ${emoji} Emojisi İçin Ayarlandı :white_check_mark:`)
+            .setDescription(`Emoji Rolünüz ${rolkanal} Kanalına ${rol} Rolüne ${emoji} Emojisi İçin Ayarlandı <a:ysltk:749379707556069457>`)
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             .setTimestamp()
             .setColor("GREEN")
             return message.channel.send(embed);
           }
 
-          db.set(`emojirol-${rolkanal.id}-${emoji}`, `${roltamam}-${emoji}`);
+          edb.set(`emojirol-${rolkanal.id}-${emoji}`, `${roltamam}-${emoji}`);
 
           const embed = new Discord.MessageEmbed()
-          .setDescription(`Emoji Rolünüz ${rolkanal} Kanalına ${rol} Rolüne ${emoji} Emojisi İçin Ayarlandı :white_check_mark:`)
+          .setDescription(`Emoji Rolünüz ${rolkanal} Kanalına ${rol} Rolüne ${emoji} Emojisi İçin Ayarlandı <a:ysltk:749379707556069457>`)
           .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
           .setTimestamp()
           .setColor("GREEN")
@@ -2387,7 +2499,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
         if (komut === "emoji-rol-kaldır") {
           if (!args[0]) {
             const embed = new Discord.MessageEmbed()
-            .setTitle(`Bu Komut İçin Bir Rol Girmelisin :exclamation:`)
+            .setTitle(`Bu Komut İçin Bir Rol Girmelisin <a:unlem:825146178503966770>`)
             .addField(`Örnek:`, `Semoji-rol-kaldır @rol emoji <kanal idsi>`)
             .setColor("RED")
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
@@ -2396,7 +2508,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           }
           if (args[0] && !args[1]) {
             const embed = new Discord.MessageEmbed()
-            .setTitle(`Bu Komut İçin Bir Emoji Koymalısınız :exclamation:`)
+            .setTitle(`Bu Komut İçin Bir Emoji Koymalısınız <a:unlem:825146178503966770>`)
             .addField(`Örnek:`, `Semoji-rol-kaldır @rol  emoji <kanal idsi>`)
             .setColor("RED")
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
@@ -2405,7 +2517,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           }
           if (args[0] && args[1] && !args[2]) {
             const embed = new Discord.MessageEmbed()
-            .setTitle(`Bu Komut İçin Bir Kanal İdsi Girmelisiniz :exclamation:`)
+            .setTitle(`Bu Komut İçin Bir Kanal İdsi Girmelisiniz <a:unlem:825146178503966770>`)
             .addField(`Örnek:`, `Semoji-rol-kaldır @rol  emoji <kanal idsi>`)
             .setColor("RED")
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
@@ -2420,7 +2532,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           const rolkanal = sunucu.channels.cache.get(args[2]);
           if (rolkanal === undefined || rolkanal === null) {
               const embed = new Discord.MessageEmbed()
-              .setTitle(`Bu Komut İçin Bir Kanal İdsi Girmelisiniz :exclamation:`)
+              .setTitle(`Bu Komut İçin Bir Kanal İdsi Girmelisiniz <a:unlem:825146178503966770>`)
               .addField(`Örnek:`, `Semoji-rol-kaldır @rol  emoji <kanal idsi>`)
               .setColor("RED")
               .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
@@ -2429,17 +2541,17 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           }
           if (!rol.startsWith('<@&') && !rol.endsWith('>')) {
             const embed = new Discord.MessageEmbed()
-            .setDescription(`Rolünüz Tanımlanamadı Lütfen Bir Rol Olduğundan Emin Olun :exclamation:`)
+            .setDescription(`Rolünüz Tanımlanamadı Lütfen Bir Rol Olduğundan Emin Olun <a:unlem:825146178503966770>`)
             .setColor("RED")
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             .setTimestamp()
             return message.channel.send(embed);
           }
 
-          const emojirolvarmı = db.has(`emojirol-${rolkanal.id}-${emoji}`)
+          const emojirolvarmı = edb.has(`emojirol-${rolkanal.id}-${emoji}`)
           if (emojirolvarmı === false) {
             const embed = new Discord.MessageEmbed()
-            .setDescription(`Zaten ${rolkanal} Kanalında ${emoji} Emojisi İle ${rol} Rol'ü Alma Etkinleştirilmemiş :exclamation:`)
+            .setDescription(`Zaten ${rolkanal} Kanalında ${emoji} Emojisi İle ${rol} Rol'ü Alma Etkinleştirilmemiş <a:unlem:825146178503966770>`)
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             .setTimestamp()
             .setColor("RED")
@@ -2448,19 +2560,19 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
 
           if (emoji.startsWith("<:") && emoji.endsWith(">")) {
             const emojidüzgün = emoji.slice(2, -20)
-            db.delete(`emojirol-${rolkanal.id}-${emojidüzgün}`);
+            edb.delete(`emojirol-${rolkanal.id}-${emojidüzgün}`);
             const embed = new Discord.MessageEmbed()
-            .setDescription(`Emoji Rolünüz Kaldırıldı :white_check_mark:`)
+            .setDescription(`Emoji Rolünüz Kaldırıldı <a:ysltk:749379707556069457>`)
             .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
             .setTimestamp()
             .setColor("GREEN")
             return message.channel.send(embed);
           }
 
-          db.delete(`emojirol-${rolkanal.id}-${emoji}`);
+          edb.delete(`emojirol-${rolkanal.id}-${emoji}`);
 
           const embed = new Discord.MessageEmbed()
-          .setDescription(`Emoji Rolünüz Kaldırıldı :white_check_mark:`)
+          .setDescription(`Emoji Rolünüz Kaldırıldı <a:ysltk:749379707556069457>`)
           .setFooter("Daha Fazla Komut İstiyorsanız Bana Ulaşın | Created by Saxquatchx", fot.avatarURL({ dynamic:true }))
           .setTimestamp()
           .setColor("GREEN")
@@ -2497,12 +2609,16 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
           message.channel.send('', attachment);
     
         }
-        if (komut === "deneme") {
-          const istek = request('https://www.youtube.com/watch?v=e9xhd8UQQ70', function (error, response, body) {
-            console.error('error:', error); // Print the error if one occurred
-            console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-            console.log('body:', body); // Print the HTML for the Google homepage.
-          }).pipe(fs.createWriteStream('yayın.AVI'));
+        if (komut === "davet") {
+          const sunucu = client.guilds.cache.get(message.guild.id);
+          const kanal = sunucu.channels.cache.get(message.channel.id);
+          kanal.createInvite({
+            maxAge: 0,
+            maxUsers: 0
+          }).then(davet => {
+            message.reply(`Davetin burada:
+https://discord.gg/${davet.code}`);
+          })
         }
     })
 }
