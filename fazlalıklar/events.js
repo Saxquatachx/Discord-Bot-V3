@@ -1,15 +1,14 @@
-module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, edb, prefix, sahip, token, distube, path,  got) => {
+module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client, db, edb, rdb, kdb, prefix, sahip, token, distube, path,  got) => {
+
+  //Bot Hazır Olduğunda
 
     client.on('ready', (ready) =>{
-      const fot = client.users.cache.get('743579595860607086');
-      const akosunucu = client.guilds.cache.get('727649417984868363');
-      const ako = akosunucu.members.cache.get('324913251945152512');
-      ako.setNickname("oğlancı");
+      const fot = client.users.cache.get('796305982665916436');
       client.user.setStatus('idle');
 
       var oynuyorkısımları = [
-          "Prefix: S",
-          "Syardım",
+          "Prefix: T",
+          "Tyardım",
           "Created by Saxquatchx"
           ]
   
@@ -24,8 +23,10 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
       console.log(chalk.hex("#03d3fc").bold("-------------"))
     })
 
+  //Mesaj Eventi
+
     client.on('message', async (message) => {
-      const fot = client.users.cache.get('743579595860607086');
+      const fot = client.users.cache.get('796305982665916436');
         const args = message.content.substring(prefix.lenght).split(" ");
         
       
@@ -144,30 +145,80 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
               break;
           }
 
-          //Küfür Koruma
+        //Küfür Koruma
+        const küfüraçıkmı = db.has(`küfür-${message.guild.id}`,"açık")
+        const küfürler = ["aq", "amk", "orospu", "oç", "yavşak", "ibne", "göt", "anan", "yarrak", "taşak", "amcık", "amına", "anaskm", "siktir", "sikik"];
 
-          const küfürkanal = message.channel.type;
+        if (!message.channel.type === "text") return;
+        if (küfüraçıkmı === false) return;
+        
+        for (var i = 0; i < küfürler.length; i++) {
+          const küfür = küfürler[i];
+          if (message.content.includes(küfür) || message.content === "sik") {
+             message.delete();
+            const kufurembed = new Discord.MessageEmbed()
+            .setDescription(`${message.guild.name} sunucusunda küfür etmek yasaktır !!!`)
+            .setColor("RED")
+            message.author.send(kufurembed);
+          }
+        }
 
-          if (küfürkanal === "text") {
-        
-        
-          const küfüraçıkmı = db.has(`küfür-${message.guild.id}`,"açık")
-        
-          const küfürler = ["aq", "amk", "orospu", "oç", "yavşak", "ibne", "göt", "anan", "yarrak", "taşak", "amcık", "amına", "anaskm", "siktir", "sikik"];
-        
-          for (var i = 0; i < küfürler.length; i++) {
-            const küfür = küfürler[i];
-        
-            if (küfüraçıkmı === true) {
-              if (message.content.includes(küfür) ||message.content === "sik") {
-                message.delete();
-                const kufurembed = new Discord.MessageEmbed()
-                .setDescription(`${message.guild.name} sunucusunda küfür etmek yasaktır !!!`)
-                .setColor("RANDOM")
-                message.author.send(kufurembed);
-        
-              }
-            }
+        //Reklam Koruma
+        const reklamacıkmı = db.has(`reklam-${message.guild.id}`);
+
+        if (!message.channel.type === "text") return;
+        if (reklamacıkmı === false) return;
+        if (!message.content.startsWith("https://discord.gg/")) return;
+
+        await message.delete();
+        const reklamembed = new Discord.MessageEmbed()
+        .addField(`${message.guild.name} sunucusunda reklam yasaktır <a:unlem:825146178503966770>`, `Eğer 3 Kere Yaparsan 7 Gün 6 Kere Yaparsan Perma Ban Yiyeceksin`)
+        .setColor("RED")
+        await message.author.send(reklamembed);
+
+        const dahaonceyapmısmı = rdb.has(`reklamyapti-${message.author.id}-${message.guild.id}`);
+
+        if (dahaonceyapmısmı === false) {
+          await rdb.set(`reklamyapti-${message.author.id}-${message.guild.id}`, "1")
+        } else {
+          const dahaonceyaptiginigetir = await rdb.get(`reklamyapti-${message.author.id}-${message.guild.id}`);
+          const yenikaydedilecek = dahaonceyaptiginigetir + 1;
+          await rdb.set(`reklamyapti-${message.author.id}-${message.guild.id}`, yenikaydedilecek);
+          if (yenikaydedilecek === "111") {
+            message.member.ban({ days: 7, reason: '3 Kere Reklam Yaptı' })
+          }
+          if (yenikaydedilecek === "111111") {
+            message.member.ban({reason: 'Çok Fazla Reklam Yaptı' })
+          }
+        }
+
+        //Link Engelleyici
+
+        const linkacıkmı = db.has(`link-${message.guild.id}`);
+
+        if (!message.channel.type === "text") return;
+        if (linkacıkmı === false) return;
+        if (!message.content.startsWith("http")) return;
+
+        await message.delete();
+        const linkembed = new Discord.MessageEmbed()
+        .addField(`${message.guild.name} sunucusunda link yasaktır <a:unlem:825146178503966770>`, `Eğer 3 Kere Atarsan 7 Gün 6 Kere Atarsan Perma Ban Yiyeceksin`)
+        .setColor("RED")
+        await message.author.send(linkembed);
+
+        const dahaonceatmismi = rdb.has(`link-${message.author.id}-${message.guild.id}`);
+
+        if (dahaonceatmismi === false) {
+          await rdb.set(`link-${message.author.id}-${message.guild.id}`, "1")
+        } else {
+          const dahaonceattiginigetir = await rdb.get(`link-${message.author.id}-${message.guild.id}`);
+          const linkyenikaydedilecek = dahaonceattiginigetir + 1;
+          await rdb.set(`link-${message.author.id}-${message.guild.id}`, linkyenikaydedilecek);
+          if (linkyenikaydedilecek === "111") {
+            message.member.ban({ days: 7, reason: '3 Kere Link Attı' })
+          }
+          if (linkyenikaydedilecek === "111111") {
+            message.member.ban({reason: 'Çok Fazla Link Attı' })
           }
         }
     })
@@ -175,7 +226,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   //Channel Update
 
     client.on('channelUpdate', async (OldChannel, NewChannel) => {
-      const fot = client.users.cache.get('743579595860607086');
+      const fot = client.users.cache.get('796305982665916436');
 
       const logkanalvarmı = await db.has(`log-${OldChannel.guild.id}`)
       if (logkanalvarmı === false) return;
@@ -372,7 +423,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
         return console.log(`${channel.recipient.username} ile bir dm kanalı oluşturuldu`)
       }
     
-      const fot = client.users.cache.get('743579595860607086');
+      const fot = client.users.cache.get('796305982665916436');
     
       const logkanalvarmı = await db.has(`log-${channel.guild.id}`)
       if (logkanalvarmı === false) return;
@@ -460,7 +511,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
       }
     }
 
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     const logkanalvarmı = await db.has(`log-${channel.guild.id}`)
     if (logkanalvarmı === false) return;
     const logkanalgetir = await db.get(`log-${channel.guild.id}`)
@@ -533,7 +584,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
       })
     }    
 
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     const logkanalvarmı = await db.has(`log-${guild.id}`)
 
     if (logkanalvarmı === false) return;
@@ -555,7 +606,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   //Guild Ban Remove
 
   client.on('guildBanRemove', async (guild, user) => {
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     const logkanalvarmı = await db.has(`log-${guild.id}`)
 
     if (logkanalvarmı === false) return;
@@ -577,7 +628,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
 
   client.on('guildCreate', async (guild) => {
     const ben = client.users.cache.get("456948152101240847");
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     const sistemkanalı = client.channels.cache.get(guild.systemChannelID);
 
     ben.send(`${guild.name} sunucusuna katıldım`);
@@ -623,7 +674,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
     }
 
     const ben = client.users.cache.get("456948152101240847");
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     ben.send(`${guild.name} sunucusundan çıktım`);
     console.log(`${guild.name} sunucusundan çıktım`);
   })
@@ -632,7 +683,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
 
   client.on('guildMemberUpdate', async (oldMember, newMember) => {
     
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
 
     if (oldMember.id === "324913251945152512") {
       if (newMember.nickname !== "oğlancı") {
@@ -694,7 +745,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   //Guild Member Add
 
   client.on('guildMemberAdd', async (member) => {
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     //hoşgeldin mesajı
     
     const hosgeldinvarmi = await db.has(`hoşgeldin-${member.guild.id}`);
@@ -790,7 +841,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   //Guild Member Remove
 
   client.on('guildMemberRemove', async (member) => {
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     const hosgeldinvarmi = await db.has(`hoşgeldin-${member.guild.id}`);
 
     if (hosgeldinvarmi === true) {
@@ -848,7 +899,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   //Message Update
 
   client.on('messageUpdate', async (message) => {
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     if (message.channel.type === "dm") {
       return;
     }
@@ -879,7 +930,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   //Message Delete
 
   client.on('messageDelete', async (message) => {
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     const logkanalvarmı = await db.has(`log-${message.guild.id}`)
     if (logkanalvarmı === false) return;
     const logkanalgetir = await db.get(`log-${message.guild.id}`)
@@ -903,7 +954,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   //Message Reaction Add
 
   client.on('messageReactionAdd', async (messageReaction, reaction) => {
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
 
     //Database İşlemleri
 
@@ -944,7 +995,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   //Message Reaction Remove
 
   client.on('messageReactionRemove', async (messageReaction, reaction) => {
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
 
     //Database İşlemleri
     const emojirolvarmı = edb.has(`emojirol-${messageReaction.message.channel.id}-${messageReaction._emoji.name}`);
@@ -984,7 +1035,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   //Role Update
 
   client.on('roleUpdate', async (oldRole, newRole) => {
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     const logkanalvarmı = await db.has(`log-${oldRole.guild.id}`)
     if (logkanalvarmı === false) return;
     const logkanalgetir = await db.get(`log-${oldRole.guild.id}`)
@@ -1029,7 +1080,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   //Role Create
 
   client.on('roleCreate', async (newRole) => {
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     const logkanalvarmı = await db.has(`log-${newRole.guild.id}`)
     if (logkanalvarmı === false) return;
     const logkanalgetir = await db.get(`log-${newRole.guild.id}`)
@@ -1059,7 +1110,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
       }
     }
 
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     const logkanalvarmı = await db.has(`log-${oldRole.guild.id}`)
     if (logkanalvarmı === false) return;
     const logkanalgetir = await db.get(`log-${oldRole.guild.id}`)
@@ -1078,7 +1129,7 @@ module.exports = (Canvas, chalk, Discord, randomPuppy, request, ytdl, fs, client
   //Voice State Update
 
   client.on('voiceStateUpdate', async (oldVoice, newVoice) => {
-    const fot = client.users.cache.get('743579595860607086');
+    const fot = client.users.cache.get('796305982665916436');
     const kisi = client.users.cache.get(newVoice.id);
 
     const akosko = client.channels.cache.get('749351192038998076');
