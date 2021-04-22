@@ -24,7 +24,9 @@
     "path": "^0.12.7",
     "random-puppy": "^1.1.0",
     "request": "^2.88.2",
-    "wio.db": "^4.0.15",
+    "rss-converter": "^1.1.6",
+    "wio.db": "^4.0.20",
+    "youtube-notification": "^1.1.0",
     "ytdl-core": "^4.5.0"
   }
 }

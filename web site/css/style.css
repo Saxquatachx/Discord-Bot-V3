@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    list-style: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+    visibility: hidden;
+    opacity: 0
+}
+
+body {
+    background-color: #DEE2DC;
+}
+
+nav {
+    width: 98.6%;
+    height: 20px;
+    background-color: white;
+    float: left;
+    position: fixed;
+    padding: 0 0 7px 1%;
+    color: black;
+    font-weight: 900;
+    text-shadow: 0.5px 1px;
+    border-radius: 50px;
+    margin: 0.2%;
+}
+
+.davet {
+    float: left;
+    font-family: 'Nunito', sans-serif;
+    font-size: 20px;
+    margin: 0 50px 0 0;
+}
+
+.ortakısım {
+    float: left;
+    height: 1920px;
+}
+
